@@ -79,6 +79,23 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     CameraFront = glm::normalize(front);
 }
 
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    float cameraSpeed = 2.5f * 0.016f;
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        CameraPos += cameraSpeed * CameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        CameraPos -= cameraSpeed * CameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        CameraPos -= glm::normalize(glm::cross(CameraFront, CameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        CameraPos += glm::normalize(glm::cross(CameraFront, CameraUp)) * cameraSpeed;
+}
+
 int main()
 {
     glfwInit();
@@ -127,6 +144,8 @@ int main()
         float timeValue = glfwGetTime();
         myShader.use();
         myShader.setFloat("timeValue", timeValue);
+
+        processInput(window)
 
         view = glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
         settingMat4(myShader.ID, "projection", projection);
