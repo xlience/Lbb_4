@@ -145,7 +145,7 @@ int main()
         myShader.use();
         myShader.setFloat("timeValue", timeValue);
 
-        processInput(window)
+        processInput(window);
 
         view = glm::lookAt(CameraPos, CameraPos + CameraFront, CameraUp);
         settingMat4(myShader.ID, "projection", projection);
